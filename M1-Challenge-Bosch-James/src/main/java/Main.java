@@ -30,18 +30,26 @@ public class Main {
 
         for (int i=0;i<customerData.size();i++) {
             if (customers.isEmpty() || Integer.parseInt(customerData.get(i)[0]) != customers.get(customers.size()-1).getId()) {
-                customers.add(new Customer());
-                customers.get(customers.size()-1).setId(Integer.parseInt(customerData.get(i)[0]));
-                customers.get(customers.size()-1).setName(customerData.get(i)[1]);
-                customers.get(customers.size()-1).getCharges().add(new AccountRecord());
-                customers.get(customers.size()-1).getCharges().get(customers.get(customers.size()-1).getCharges().size()-1).setCharge(Integer.parseInt(customerData.get(i)[2]));
-                customers.get(customers.size()-1).getCharges().get(customers.get(customers.size()-1).getCharges().size()-1).setChargeDate(customerData.get(i)[3]);
+                Customer c = new Customer();
+                AccountRecord a = new AccountRecord();
+
+                c.setId(Integer.parseInt(customerData.get(i)[0]));
+                c.setName(customerData.get(i)[1]);
+                a.setCharge(Integer.parseInt(customerData.get(i)[2]));
+                a.setChargeDate(customerData.get(i)[3]);
+                c.getCharges().add(a);
+                customers.add(c);
             }
 
             else if (Integer.parseInt(customerData.get(i)[0]) == customers.get(customers.size()-1).getId()) {
-                customers.get(customers.size()-1).getCharges().add(new AccountRecord());
-                customers.get(customers.size()-1).getCharges().get(customers.get(customers.size()-1).getCharges().size()-1).setCharge(Integer.parseInt(customerData.get(i)[2]));
-                customers.get(customers.size()-1).getCharges().get(customers.get(customers.size()-1).getCharges().size()-1).setChargeDate(customerData.get(i)[3]);
+                Customer lastC = customers.get(customers.size()-1);
+                AccountRecord a = new AccountRecord();
+
+                a.setCharge(Integer.parseInt(customerData.get(i)[2]));
+                a.setChargeDate(customerData.get(i)[3]);
+
+                lastC.getCharges().add(a);
+
             }
         }
 
