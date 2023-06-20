@@ -3,15 +3,12 @@ package com.company.chatterbook.controller;
 import com.company.chatterbook.models.ChatterPost;
 import com.company.chatterbook.models.User;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.Arrays;
 import java.util.List;
 
+@RestController
 public class ChatterbookController {
 
     private List<User> userList;
@@ -44,7 +41,40 @@ public class ChatterbookController {
         userList = Arrays.asList(luis, sue, timothy, george, arturo, mariella, paolo, tri, jane, carol, carl);
     }
 
+    @RequestMapping(value = "/users", method = RequestMethod.GET)
+    @ResponseStatus(value = HttpStatus.OK)
+    public List<User> getAllUsers() {
+        return this.userList;
+    }
 
+    @RequestMapping(value = "/users/{name}", method = RequestMethod.GET)
+    @ResponseStatus(value = HttpStatus.OK)
+    public User getUserById(@PathVariable String name) {
+        User foundUser = null;
 
+        for(User user : userList) {
+            if(user.getName().equalsIgnoreCase(name)) {
+                foundUser = user;
+                break;
+            }
+        }
+
+        return foundUser;
+    }
+
+    @RequestMapping(value = "/users/{name}/posts", method = RequestMethod.GET)
+    @ResponseStatus(value = HttpStatus.OK)
+    public List<ChatterPost> getPostsByUser(@PathVariable String name) {
+        User foundUser = null;
+
+        for(User user : userList) {
+            if(user.getName().equalsIgnoreCase(name)) {
+                foundUser = user;
+                break;
+            }
+        }
+
+        return foundUser.getChatterPosts();
+    }
 
 }
