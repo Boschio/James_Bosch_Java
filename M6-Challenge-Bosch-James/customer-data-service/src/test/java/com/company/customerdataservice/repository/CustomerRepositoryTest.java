@@ -5,7 +5,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,18 +12,17 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
-@SpringBootTest(classes = CustomerRepositoryTest.class)
+@SpringBootTest
 public class CustomerRepositoryTest {
 
-    @MockBean
     @Autowired
-    private CustomerRepository customerRepository;
-    private Customer customer;
-    private Customer customer2;
+    CustomerRepository customerRepository;
+    Customer customer;
+    Customer customer2;
 
     @BeforeEach
     public void setUp() throws Exception {
-//        customerRepository.deleteAll();
+        customerRepository.deleteAll();
 
         customer = new Customer();
         customer.setFirstName("James");
@@ -93,7 +91,7 @@ public class CustomerRepositoryTest {
         customer.setCompany("Capcom Inc.");
 
         customerRepository.save(customer);
-        assertEquals(customerRepository.findById(1).get().getCompany(), "Capcom Inc.");
+        assertEquals(customerRepository.findById(customer.getId()).get().getCompany(), "Capcom Inc.");
     }
 
     @Test
@@ -108,7 +106,7 @@ public class CustomerRepositoryTest {
 
     @Test
     public void shouldGetCustomerById() {
-        Optional<Customer> customerFromRepo = customerRepository.findById(1);
+        Optional<Customer> customerFromRepo = customerRepository.findById(customer.getId());
         assertEquals(customerFromRepo.get(), customer);
     }
 
